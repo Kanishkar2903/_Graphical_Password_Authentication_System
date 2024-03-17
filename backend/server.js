@@ -1,56 +1,79 @@
 const express = require('express');
+const bodyParser = require('body-parser');
 const sqlite3 = require('sqlite3').verbose();
+const path = require('path');
 
-// Create Express app
 const app = express();
-const port = process.env.PORT || 3000;
+const PORT = 3000;
 
-// Create SQLite database connection
+// Middleware
+app.use(bodyParser.json());
+
+// Connect to the database
 const db = new sqlite3.Database('users.db');
-
-// Create users table if not exists
 db.serialize(() => {
-    db.run(`CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT NOT NULL,
-        email TEXT NOT NULL UNIQUE,
-        password TEXT NOT NULL
-    )`);
+    db.run('CREATE TABLE IF NOT EXISTS users (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, email TEXT UNIQUE, password TEXT)');
 });
 
-// Middleware to parse JSON requests
-app.use(express.json());
+// Serve static files from the frontend directory
+app.use(express.static(path.join(__dirname, '..', 'frontend')));
 
-// User signup endpoint
-app.post('/signup', (req, res) => {
-    const { username, email, password } = req.body;
+// Route to handle signup request
+app.post('/api/signup', (req, res) => {
+    const { name, email, password } = req.body;
 
-    // Insert user into database
-    db.run('INSERT INTO users (username, email, password) VALUES (?, ?, ?)', [username, email, password], (err) => {
+    // Check if user already exists
+    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
         if (err) {
-            return res.status(400).json({ error: err.message });
+            return res.status(500).send('Internal server error');
         }
-        res.status(201).json({ message: 'User created successfully' });
+        if (row) {
+            return res.status(400).send('User already exists');
+        }
+
+        // Insert new user into the database
+        db.run('INSERT INTO users (name, email, password) VALUES (?, ?, ?)', [name, email, JSON.stringify(password)], (err) => {
+            if (err) {
+                return res.status(500).send('Internal server error');
+            }
+            res.status(201).send('Account created successfully');
+        });
     });
 });
 
-// Sign-in endpoint
-app.post('/signin', (req, res) => {
+// Route to handle signin request
+app.post('/api/signin', (req, res) => {
     const { email, password } = req.body;
 
-    // Check if user exists in the database
-    db.get('SELECT * FROM users WHERE email = ? AND password = ?', [email, password], (err, row) => {
+    // Find user by email
+    db.get('SELECT * FROM users WHERE email = ?', [email], (err, row) => {
         if (err) {
-            return res.status(500).json({ error: err.message });
+            return res.status(500).send('Internal server error');
         }
         if (!row) {
-            return res.status(401).json({ error: 'Invalid email or password' });
+            return res.status(404).send('User not found');
         }
-        res.status(200).json({ message: 'Login successful', user: row });
+        
+        const parsedPassword = JSON.parse(row.password);
+        const stringifiedPassword = JSON.stringify(password);
+
+        if (JSON.stringify(parsedPassword) === stringifiedPassword) {
+            res.send('Signed in successfully');
+        } else {
+            console.log(parsedPassword);
+            console.log(stringifiedPassword);
+            res.status(401).send('Incorrect password');
+        }
+
     });
+});
+
+// Serve the frontend HTML file
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'frontend', 'index.html'));
 });
 
 // Start server
-app.listen(port, () => {
-    console.log(`Server is running on http://localhost:${port}`);
+app.listen(PORT, () => {
+    console.log(`Server is running on http://localhost:${PORT}`);
 });

@@ -31,6 +31,27 @@ function signup() {
     sessionStorage.setItem("upname", document.getElementById('upmail').value);
     sessionStorage.setItem("uppass", JSON.stringify(selectedImagesUp));
     alert("Account Created Successfully");
+    const name = document.getElementById('upname').value;
+    const email = document.getElementById('upmail').value;
+    const signupData = {
+        name: name,
+        email: email,
+        password: selectedImagesUp // Pass selected images array as password
+    };
+    fetch('/api/signup', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(signupData)
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 // Function to handle sign in process
@@ -39,14 +60,30 @@ function signin() {
         return;
     }
     let str = document.getElementById('inmail').value;
-    let array = JSON.parse(sessionStorage.getItem("uppass"));
-    let check1 = JSON.stringify(selectedImagesIn) === JSON.stringify(array);
-    if (check1) {
-        alert("Login is successful");
-        NewTab();
-    } else {
-        alert("Login Failed");
-    }
+    const email = document.getElementById('inmail').value;
+    const signinData = {
+        email: email,
+        password: selectedImagesIn // Pass selected images array as password
+    };
+    fetch('/api/signin', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(signinData)
+    })
+    .then(response => response.text())
+    .then(data => {
+        console.log(data);
+        if (data === 'Signed in successfully') {
+            NewTab();
+        } else {
+            alert("Login Failed");
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
 // Function to validate sign-up fields and password array
@@ -91,7 +128,7 @@ function validateSignIn() {
 
 // Function to open a new tab
 function NewTab() {
-    window.open("https://stjosephs.ac.in/index.html", "_blank");
+    window.open("https://stjosephs.ac.in/index.html", "_self");
 }
 
 // Function to create image grid
@@ -102,7 +139,7 @@ function createImageGrid(grid, folder, upOrin) {
     for (let i = 0; i < 25; i++) {
         const img = document.createElement('img');
         img.src = `images/${folder}/image/${shuffledImageOrder[i]}.jpg`;
-        img.alt = `Image ${shuffledImageOrder[i]}`;
+        img.alt = `${shuffledImageOrder[i]}`;   
         img.classList.add('grid-item');
         img.addEventListener('click', () => handleImageSelection(img, grid.id, folder, upOrin));
         grid.appendChild(img);
@@ -126,7 +163,7 @@ function handleImageSelection(img, gridId, folder, upOrin) {
         createImageGrid(grid, `folder${iteration}`, upOrin);
     } else {
         console.log("Images clicked", selectedImages);
-        alert("Done");
+
         iteration = 1;
         // Disable event listeners on images
         // disableImageEventListeners(gridId);

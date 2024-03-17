@@ -21,7 +21,7 @@ body{
 
 h1{
     font-weight: bold;
-    margin: 0;
+    margin: 25px;
 
 }
 
@@ -30,12 +30,19 @@ p{
     font-weight: 100;
     line-height: 20px;
     letter-spacing: 0.5px;
-    margin: 20px 0 30px;
+    margin: 5px 0 10px;
 }
+
+.sideHeader{
+    font-weight: bold;
+    margin: 0;
+}
+
  
 span{
     font-size: 12px;
-
+    margin-top:-20px;
+    margin-bottom: 10px;
 }
 
 a{
@@ -64,6 +71,7 @@ input{
     overflow: hidden;
     height: 90%;
     width: 90%;
+    top: 50px;
 }
 
 .form-container form {
@@ -114,6 +122,21 @@ button{
     cursor: pointer;  
 }
 
+.btn{
+    border-radius: 20px;
+    border: 1px solid #ff4b2b;
+    background: #ff4b2b;
+    font-size: 12px;
+    color: #fff;
+    font-weight: bold;
+    padding: 12px 45px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: transform 80ms ease-in;  
+    cursor: pointer;  
+    margin-bottom: 60px;
+}
+
 button:active {
     transform: scale(0.95);
 }
@@ -140,6 +163,7 @@ button.ghost{
     z-index: 2;
 }
 .sign-up-container{
+    top: 10px;
     left: 0;
     width: 50%;
     z-index: 1;
@@ -160,7 +184,7 @@ button.ghost{
     background-color: #ff416c;
     /* background: linear-gradient(to right, #ff4b2b, #ff416c) */
     /* background: linear-gradient(to right, #E23E57, #88304E) */
-    background: linear-gradient(to right, #461111, #A13333)
+    background: linear-gradient(to right, #69ba5f, #2c2cd0)
      no-repeat 0 0 / cover;
      color: #fff;
      position: relative;
@@ -247,6 +271,10 @@ button.ghost{
     text-align: center;
 }
 
+#inmail{
+    margin-bottom: 30px;
+}
+
 .password{
     display: grid;
     grid-template-columns: auto auto auto auto auto;
@@ -280,11 +308,12 @@ button.ghost{
     width: 80%;
     margin: auto;
     padding: 20px;
+    margin-top: -15px;
 }
 
 .grid-item {
-    width: 70px;
-    height: 70px;
+    width: 60px;
+    height: 60px;
     cursor: pointer;
     border: 2px solid transparent; /* Initially transparent border */
 }
@@ -298,3 +327,4 @@ button.ghost{
     height: 100%;
     object-fit: cover;
 }
+
