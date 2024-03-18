@@ -118,7 +118,7 @@ function validateSignIn() {
 
     // Check if password array is filled with maxPasswordLength images
     if (selectedImagesIn.length !== maxPasswordLength) {
-        alert("Please select maxPasswordLength images as your password");
+        alert("Please select 5 images as your password");
         return false;
     }
 
