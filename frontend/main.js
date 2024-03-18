@@ -24,12 +24,10 @@ signInButton.addEventListener('click', () => {
 
 // Function to handle sign up process
 function signup() {
-    if(!validateSignUp()){
+    if (!validateSignUp()) {
         return;
     }
     // Store email and selected images in session during sign up
-    sessionStorage.setItem("upname", document.getElementById('upmail').value);
-    sessionStorage.setItem("uppass", JSON.stringify(selectedImagesUp));
     alert("Account Created Successfully");
     const name = document.getElementById('upname').value;
     const email = document.getElementById('upmail').value;
@@ -45,18 +43,18 @@ function signup() {
         },
         body: JSON.stringify(signupData)
     })
-    .then(response => response.text())
-    .then(data => {
-        console.log(data);
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 // Function to handle sign in process
 function signin() {
-    if(!validateSignIn()){
+    if (!validateSignIn()) {
         return;
     }
     let str = document.getElementById('inmail').value;
@@ -72,18 +70,18 @@ function signin() {
         },
         body: JSON.stringify(signinData)
     })
-    .then(response => response.text())
-    .then(data => {
-        console.log(data);
-        if (data === 'Signed in successfully') {
-            NewTab();
-        } else {
-            alert("Login Failed");
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-    });
+        .then(response => response.text())
+        .then(data => {
+            console.log(data);
+            if (data === 'Signed in successfully') {
+                NewTab();
+            } else {
+                alert("Login Failed");
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
 }
 
 // Function to validate sign-up fields and password array
@@ -139,7 +137,7 @@ function createImageGrid(grid, folder, upOrin) {
     for (let i = 0; i < 25; i++) {
         const img = document.createElement('img');
         img.src = `images/${folder}/image/${shuffledImageOrder[i]}.jpg`;
-        img.alt = `${shuffledImageOrder[i]}`;   
+        img.alt = `${shuffledImageOrder[i]}`;
         img.classList.add('grid-item');
         img.addEventListener('click', () => handleImageSelection(img, grid.id, folder, upOrin));
         grid.appendChild(img);
@@ -165,20 +163,9 @@ function handleImageSelection(img, gridId, folder, upOrin) {
         console.log("Images clicked", selectedImages);
 
         iteration = 1;
-        // Disable event listeners on images
-        // disableImageEventListeners(gridId);
     }
 }
 
-// Function to disable event listeners on images
-function disableImageEventListeners(gridId) {
-    const grid = document.getElementById(gridId);
-    const images = grid.querySelectorAll('.grid-item');
-    images.forEach(img => {
-        img.removeEventListener('click', handleImageSelection);
-        img.style.pointerEvents = 'none'; // Disable pointer events on images
-    });
-}
 
 // Function to get the next folder name
 function getNextFolder(currentFolder) {
