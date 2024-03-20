@@ -126,7 +126,7 @@ function validateSignIn() {
 
 // Function to open a new tab
 function NewTab() {
-    window.open("https://stjosephs.ac.in/index.html", "_self");
+    window.open("https://mgit.ac.in/", "_blank");
 }
 
 // Function to create image grid
