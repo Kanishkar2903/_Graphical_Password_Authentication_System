@@ -52,8 +52,8 @@ Ensure you have the following installed:
 1. **Clone the repository:**
 
     ```bash
-    git clone https://github.com/your-username/graphical-password-authentication.git
-    cd graphical-password-authentication/backend
+    git clone https://github.com/maheshwaranandh/_Graphical-Password-Authentication-System
+    cd _Graphical-Password-Authentication-System/backend
     ```
 
 2. **Install dependencies:**
